@@ -32,7 +32,7 @@ If you want to change the naming convention for EDF files, make sure you change 
 
 5. In DataViewer, add a new variable (ScannerPulseTime)
 	* Analysis > Trial Variable Manager
-	* Click the little page (![page](./page.png)) to create a new variable.
+	* Click the little page (![page](./Images/page.png)) to create a new variable.
 	* Under Label, enter ScannerPulseTime
 	* Under Default Value, enter 0
 	* Under Definition, enter "Time when scanner started."
