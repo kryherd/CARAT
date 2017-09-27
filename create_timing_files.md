@@ -25,6 +25,7 @@ In this step, we are extracting a timestamp that corresponds with when the scann
 	* e.g. `04 05 06 07`
 4.	In Terminal, run the following command:
 	* `sh onsets.sh`
+
 **Important:** `extract_onsets.py` is expecting SessionData files with the following naming format:
 `pilot??_Session_Data.txt` where ?? is the subject number.
 If you want to change the naming convention for EDF files, make sure you change this line within `extract_onsets.py`.
