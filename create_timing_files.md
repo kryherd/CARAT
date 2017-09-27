@@ -29,6 +29,7 @@ In this step, we are extracting a timestamp that corresponds with when the scann
 **Important:** `extract_onsets.py` is expecting SessionData files with the following naming format:
 `pilot??_Session_Data.txt` where ?? is the subject number.
 If you want to change the naming convention for EDF files, make sure you change this line within `extract_onsets.py`.
+
 5. In DataViewer, add a new variable (ScannerPulseTime)
 	* Analysis > Trial Variable Manager
 	* Click the little page (![page](./page.png)) to create a new variable.
