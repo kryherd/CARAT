@@ -14,14 +14,14 @@ One of the most important parts of task-related fMRI is making sure you have the
 In this step, we are extracting a timestamp that corresponds with when the scanner started for each subject. Then, we will add that variable to DataViewer to make it easier to export. 
 
 1.	Find SessionData files:
-	a.	Look in the folder where you put your saved DataViewer session.
-	b.	Open the folder ending in .res
-	c.	Open the Session\_Data folder
+	*	Look in the folder where you put your saved DataViewer session.
+	*	Open the folder ending in .res
+	*	Open the Session\_Data folder
 2.	Copy all SessionData files into a folder containing the following scripts:
-	a.	`extract_onset.py`
-	b.	`onsets.sh`
+	*	`extract_onset.py`
+	*	`onsets.sh`
 3.	Open `onsets.sh` in a text editor (I prefer [TextWrangler](https://www.barebones.com/products/textwrangler/)) and edit line 9 to include the subjects you want to analyze.
-	a.	Make sure there is a space between each subject number
-	b. e.g. `04 05 06 07`
+	*	Make sure there is a space between each subject number
+	*	e.g. `04 05 06 07`
 4.	In Terminal, run the following command:
-	a.	`sh onsets.sh`
+	*	`sh onsets.sh`
