@@ -5,8 +5,8 @@ One of the most important parts of task-related fMRI is making sure you have the
 
 ## Step 0: Creating a DataViewer session.
 
-1. Import all the data you want to analyze. 
-	a.	File > Import Data > Multiple Data Files…
+1. Import all the data (.edf files) you want to analyze. 
+	* File > Import Data > Multiple Data Files...
 2.	Save the DataViewer session.
 
 ## Step 1: Adding ScannerPulseTime variable to DataViewer.
@@ -14,14 +14,66 @@ One of the most important parts of task-related fMRI is making sure you have the
 In this step, we are extracting a timestamp that corresponds with when the scanner started for each subject. Then, we will add that variable to DataViewer to make it easier to export. 
 
 1.	Find SessionData files:
-	*	Look in the folder where you put your saved DataViewer session.
-	*	Open the folder ending in .res
-	*	Open the Session\_Data folder
+	* Look in the folder where you put your saved DataViewer session.
+	* Open the folder ending in .res
+	* Open the Session\_Data folder
 2.	Copy all SessionData files into a folder containing the following scripts:
-	*	`extract_onset.py`
-	*	`onsets.sh`
+	* `extract_onset.py`
+	* `onsets.sh`
 3.	Open `onsets.sh` in a text editor (I prefer [TextWrangler](https://www.barebones.com/products/textwrangler/)) and edit line 9 to include the subjects you want to analyze.
-	*	Make sure there is a space between each subject number
-	*	e.g. `04 05 06 07`
+	* Make sure there is a space between each subject number
+	* e.g. `04 05 06 07`
 4.	In Terminal, run the following command:
-	*	`sh onsets.sh`
+	* `sh onsets.sh`
+**Important:** `extract_onsets.py` is expecting SessionData files with the following naming format:
+`pilot??_Session_Data.txt` where ?? is the subject number.
+If you want to change the naming convention for EDF files, make sure you change this line within `extract_onsets.py`.
+5. In DataViewer, add a new variable (ScannerPulseTime)
+	* Analysis > Trial Variable Manager
+	* Click the little page (![page](./page.png)) to create a new variable.
+	* Under Label, enter ScannerPulseTime
+	* Under Default Value, enter 0
+	* Under Definition, enter "Time when scanner started."
+	* Select ScannerPulseTime in the list and use the arrow button to place it right below SUBJECT.
+	* Press OK
+6. Set the ScannerPulseTime value for each subject.
+	* Analysis > Trial Variable Value Editor
+	* Open the output from `onsets.sh` (should be named `onsets.txt` -- you can open in Excel if you want)
+	* For each subject, copy the value under Onset into all ScannerPulseTime for all rows. You can select all of the cells you want to paste to and then just press Command + V.
+	
+## Step 2: Export the raw data from DataViewer.
+
+In this step, we will use a message report to get all relevant data files.
+
+1. Start a Message Report.
+	* Analysis > Reports > Message Report
+2. Select the following variables:
+	* `RECORDING_SESSION_LABEL`
+	* `TRIAL_INDEX`
+	* `CURRENT_MSG_TEXT`
+	* `TRIAL_START_TIME`
+	* `CURRENT_MSG_TIME`
+	* `ScannerPulseTime`
+	* Any relevant trial variables (e.g., emotion, trial type)
+3. Check the box next to Create one Report File per EDF File.
+4. Save changes.
+5. Save these output files in your desired folder.
+
+## Step 3: Create timing files.
+
+This step will create the timing files. Since we will be using a duration-modulated block basis function (dmBLOCK), they need to have a XX:YY format, where XX is when the stimulus started (in seconds) and YY is its duration (in seconds).
+1. Make sure all of the following files are in the same folder:
+	* Output files from Step 2
+	* `make_timings.py`
+	* `create_multiple_timings.py`
+2. Check your `make_timings.py` script.
+	* Change line 16 to point towards the output files from Step 2
+3. Check your `create_multiple_timings.py` script.
+	* Change subjects in line 2 to desired subjects (with a space in between each one)
+4. In Terminal, run the following command:
+	* `sh create_multiple_timings.sh`
+	
+Once this is finished, you should have timing files for all of the subjects that you indicated in the folder that you have all of this information in. Awesome!
+
+
+
