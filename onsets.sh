@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-for expRun in SPONT_2 # change runs here
+for expRun in SPONT_1 SPONT_2 SPR_1 SPR_2 # change runs here
 do
 	# this loop runs the next loop for each run that you specify
 	cp ./${expRun}/${expRun}.res/Session_Data/*Session_Data.txt ./
