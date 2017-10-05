@@ -18,8 +18,9 @@ with open(file, 'r') as f:
 	s = f.read()
 
 # find onsets: multi-digit number before EXP_INSTR_KEYBOARD
-onset = re.compile(r"(\d{3,})\s\d\sEXP_INSTR_KEYBOARD", re.MULTILINE)
+onset = re.compile(r"(\d{3,})\s\d\sINSTR_KEYBOARD", re.MULTILINE)
 match = onset.findall(s)
-on = ''.join(match)
+# this picks the last match, because in the SPR blocks, there are 2 instances of INSTR_KEYBOARD
+on = match[-1]
 
 print("%s %s" %(args.subj, on))

@@ -20,9 +20,11 @@ In this step, we are extracting a timestamp that corresponds with when the scann
 2.	Copy all SessionData files into a folder containing the following scripts:
 	* `extract_onset.py`
 	* `onsets.sh`
-3.	Open `onsets.sh` in a text editor (I prefer [TextWrangler](https://www.barebones.com/products/textwrangler/)) and edit line 9 to include the subjects you want to analyze.
-	* Make sure there is a space between each subject number
+3.	Open `onsets.sh` in a text editor (I prefer [TextWrangler](https://www.barebones.com/products/textwrangler/)) and edit for the runs and subjects you want to analyze.
+	* Make sure there is a space between each subject number or run
 	* e.g. `04 05 06 07`
+	* Runs: Line 3
+	* Subjects: Line 8
 4.	In Terminal, run the following command:
 	* `sh onsets.sh`
 
@@ -30,7 +32,7 @@ In this step, we are extracting a timestamp that corresponds with when the scann
 `pilot??_Session_Data.txt` where ?? is the subject number.
 If you want to change the naming convention for EDF files, make sure you change this line within `extract_onsets.py`.
 
-5. In DataViewer, add a new variable (ScannerPulseTime)
+5. In your DataViewer session (.evs file), add a new variable (ScannerPulseTime)
 	* Analysis > Trial Variable Manager
 	* Click the little page (![page](./Images/page.png)) to create a new variable.
 	* Under Label, enter ScannerPulseTime
@@ -63,17 +65,18 @@ In this step, we will use a message report to get all relevant data files.
 
 ## Step 3: Create timing files.
 
-This step will create the timing files. Since we will be using a duration-modulated block basis function (dmBLOCK), they need to have a XX:YY format, where XX is when the stimulus started (in seconds) and YY is its duration (in seconds).
+This step will create the timing files. Since we will be using a duration-modulated block basis function (dmBLOCK), they need to have a XX:YY format, where XX is when the stimulus started (in seconds) and YY is its duration (in seconds). I've created two sets of scripts: one for making timing files for the SPR part of the experiment, and one for making timing files for SPONT. The general procedure is the same for both.
+
 1. Make sure all of the following files are in the same folder:
 	* Output files from Step 2
-	* `make_timings.py`
-	* `create_multiple_timings.py`
-2. Check your `make_timings.py` script.
-	* Change line 16 to point towards the output files from Step 2
-3. Check your `create_multiple_timings.py` script.
+	* `make_spr_timings.py` or `make_spont_timings.py`
+	* `SPR_multiple_timings.py` or `SPONT_multiple_timings.py`
+2. Check your `make_spr_timings.py` or `make_spont_timings.py` script.
+	* Change lines 16 & 17 to point towards the output files from Step 2
+3. Check your `SPR_multiple_timings.py` or `SPONT_multiple_timings.py` script.
 	* Change subjects in line 2 to desired subjects (with a space in between each one)
 4. In Terminal, run the following command:
-	* `sh create_multiple_timings.sh`
+	* `sh SPR_multiple_timings.sh` or `sh SPONT_multiple_timings.py`
 	
 Once this is finished, you should have timing files for all of the subjects that you indicated in the folder that you have all of this information in. Awesome!
 

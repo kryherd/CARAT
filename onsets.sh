@@ -1,13 +1,16 @@
-# create empty file
-# you can change "onsets.txt" if you want a different filename
-# just be sure to change it throughout this file
+#!/usr/bin/env bash
 
-# this loop runs the extract_onsets.py script
-# it copies the output line by line into a text file
-
-echo "Subject Onset" > onsets.txt
-for i in 04 05 06 07 #change subject numbers here
+for expRun in SPONT_2 # change runs here
 do
-	line=`python extract_onset.py --subj ${i}`
-	echo "$line" >> onsets.txt
+	# this loop runs the next loop for each run that you specify
+	cp ./${expRun}/${expRun}.res/Session_Data/*Session_Data.txt ./
+	echo "Subject Onset" > ${expRun}-onsets.txt
+	for i in 07 #change subject numbers here
+	do
+		# this loop runs the extract_onsets.py script
+		# it copies the output line by line into a text file
+		line=`python extract_onset.py --subj ${i}`
+		echo "$line" >> ${expRun}-onsets.txt
+	done
+	rm *_Session_Data.txt
 done
