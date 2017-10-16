@@ -17,7 +17,7 @@ epi_dir="spr"
 # run afni_proc.py to create a single subject processing script
 afni_proc.py -subj_id sub-$subj                                      \
         -script ${top_dir}/sub-${subj}/spr_preproc_subj-$subj -scr_overwrite                        \
-        -out_dir ${top_dir}/sub-${subj}/sub-${subj}.results      \
+        -out_dir ${top_dir}/sub-${subj}/sub-${subj}.spr      \
         -blocks tshift align tlrc volreg blur mask scale regress \
         -copy_anat ${top_dir}/sub-${subj}/$anat_dir/sub-${subj}_run-01_T1w.nii.gz            \
         -tcat_remove_first_trs 0                                 \

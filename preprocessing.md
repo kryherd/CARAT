@@ -66,3 +66,38 @@ In this step, we will generate the preprocessing scripts you will need to actual
 1. Check the top directory (line 10 of `create_afni_proc.sh` as described above.
 2. Change line 2 of `multiple_afni_proc.sh` to a list of the subjects you want to preprocess, separated by a space.
 3. Run the following command: `sh multiple_afni_proc.sh`
+
+## Running the Preprocessing Scripts
+
+Now we will actually run the preprocessing. Once you generate the scripts, you should see them in each subject's folder. One cool feature of `afni_proc` is that it puts the code to run the script in the script itself. 
+
+1. Open the generated preprocessing script in your text editor (e.g., TextWrangler). You may have to specify that the file is opened using the text editor, since by default it will be an executable file.
+2. Copy the text from line 8 (not including the `#`).
+3. Open Terminal.
+4. Navigate to the folder containing the preprocessing script (usually `~/some_directory/sub-SUBJNUMBER/`)
+5. Type `tcsh` to start the t-shell
+6. Paste the text from the preprocessing script.
+
+That's it! It will take a little while for the preprocessing script to run. Your computer will make some sounds while it runs. That's ok.
+
+**Note:** Keep on the lookout for WARNINGS or ERRORS. OK warnings include:
+  
+* Warnings about obliqueness (usually AFNI can deal with the small amount of obliqueness our scanner gives)
+* Dataset is already aligned in time
+* Input dataset is not 3D+time
+* Removing constant voxels
+
+## Checking the Preprocessing
+
+A first step for checking the success of your preprocessing is using @ss_review_driver. This is an interactive function created by AFNI to make sure your preprocessing went smoothly. I've also created a log file for you to keep track of your preprocessing. You will have to run the ss_review_driver script twice -- once for SPONT and once for SPR.
+
+1. Navigate into the results directory `sub-subjnunm/sub-subjnum.spr or .spont`
+2. Paste `./@ss_review_driver` into Terminal.
+3. Follow the prompts.
+4. In the first step, copy the average motion per TR as well as the number of TRs censored and the % of TRs into the log.
+5. Indicate how good the alignment is. Use the 'o' key to toggle the overlay (functional data) on and off. Pay attention to ventricles to get a good idea of how good the alignment is.
+6. Copy any regression warnings into the log.
+7. For activation, you should see most of the big blobs within the brain. Some blobs will be outside of the brain, but in general the shape should match the underlying anatomy. Note this on the log.
+8. Note any additional things you notice during the review drivers process.
+
+Hopefully, most of your data will preprocess fine. I would suggest going through the review drivers process soon after you collect each subject. That way, I can help adjust the preprocessing script if there are some problems with alignment or skull stripping, etc. for a given subject.
