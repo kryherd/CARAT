@@ -8,6 +8,8 @@ Here is a list of the documentation that is available:
 This file will tell you how to create timing files from raw EDF (eyetracker) output. Timing files are necessary to run the preprocessing and first-level statistical analysis.
 2. **[Preprocessing](./preprocessing.md)**  
 Preprocessing takes your raw imaging data (DICOM format) and timing information and creates subject-level statistical maps that can be used for the second-level analysis. Here, you will learn how to gather/organize your data, how to generate preprocessing scripts, and how to run the preprocessing scripts.
+3. **[Optimization](./optimization/)**  
+Optimization refers to organizing your experimental stimuli so that you have the most power to estimate each condition. This folder contains information and scripts to optimize SPR and SPONT.
 
 
 
