@@ -6,41 +6,53 @@
 import numpy as np
 import sys
 import pandas as pd
+import argparse
+import subprocess
+import re
+
+# set up argument parser
+parser = argparse.ArgumentParser()
+parser.add_argument('--run', action='store', type=int, help="run")
+args=parser.parse_args()
 
 # create function that reshapes the timing files
-def timing_type4(data, num):
+def timing_type4(data, num, run):
 	df=pd.read_table(data, sep=' ', header=None)
 	df=df.transpose()
 	df=df.drop(4)
-	df=df.rename(index=str, columns={0:"Onset Time"})
+	run2 = run-1
+	df=df.loc[:,[run2]]
+	df=df.rename(index=str, columns={run2:"Onset Time"})
 	df['Type']=num
 	return df;
 
 # load and reshape the timing files
 pm="./Posed_minus.1D"
-PM = timing_type4(pm,1)
+PM = timing_type4(pm,1,args.run)
 
 pp="./Posed_plus.1D"
-PP = timing_type4(pp,2)
+PP = timing_type4(pp,2, args.run)
 
 rm="./Regulated_minus.1D"
-RM = timing_type4(rm,3)
+RM = timing_type4(rm,3, args.run)
 
 rp="./Regulated_plus.1D"
-RP = timing_type4(rp,4)
+RP = timing_type4(rp,4,args.run)
 
 # create function that reshapes the timing files (because there are more Spontaneous stimuli)
-def timing_type8(data, num):
+def timing_type8(data, num, run):
 	df=pd.read_table(data, sep=' ', header=None)
 	df=df.transpose()
 	df=df.drop(8)
-	df=df.rename(index=str, columns={0:"Onset Time"})
+	run2 = run-1
+	df=df.loc[:,[run2]]
+	df=df.rename(index=str, columns={run2:"Onset Time"})
 	df['Type']=num
 	return df;
 
 # load and reshape the timing files
 s="./Spontaneous.1D"
-S = timing_type8(s,5)
+S = timing_type8(s,5,args.run)
 
 # put all reshaped timing files together
 times = [PM, PP, RM, RP, S]
@@ -54,4 +66,4 @@ trialtypes = {1: "Posed_minus", 2: "Posed_plus", 3: "Regulated_minus", 4: "Regul
 result['TrialType'] = result['Type'].map(trialtypes)
 
 # write to csv
-result.to_csv('SPR_timings.csv', index=False, sep=',')
+result.to_csv('SPR_timings_run' + str(args.run) + '.csv', index=False, sep=',')

@@ -11,13 +11,13 @@
 # create directory for that iteration
 mkdir ./iteration$1
 # copy data
-cp ../stim.$1.*.1D ./iteration$1
+cp ./stim.$1*.1D ./iteration$1
 cd ./iteration$1
 
 #rename data
-cp stim.$1.01.1D Posed.1D
-cp stim.$1.02.1D Regulated.1D
-cp stim.$1.03.1D Spontaneous.1D
+cp stim.$1_01_Pleasant.1D Pleasant.1D
+cp stim.$1_02_Neutral.1D Neutral.1D
+cp stim.$1_03_Unpleasant.1D Unpleasant.1D
 
 #remove old files
 rm ./stim.$1*.1D
@@ -26,4 +26,5 @@ rm ./stim.$1*.1D
 cp ../timingtotal.py .
 
 # run timingtotal script
-python timingtotal.py
+python timingtotal.py --run 1
+python timingtotal.py --run 2

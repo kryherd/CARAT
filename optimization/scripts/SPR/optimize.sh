@@ -1,63 +1,47 @@
 #!/bin/bash
-### OPTIMIZE SCRIPT FOR SPR - CARAT
-#the number of iterations - 100 is good, but change it if you want
+#the number of iterations
 N=100
-# start a document called "results" that has these headers
 echo "iteration eff seed" > results.txt
-#start a loop in i from 1 to $N (number of iterations)
+#TODO: start a loop in i from 1 to $N
 for i in `seq $N`; do
 	#portable method of getting a random number
 	seed=`cat /dev/random|head -c 256|cksum |awk '{print $1}'`
 	
-	#generate random stimulus files
-	# -nt number of TRs
-	# -num_stimts number of stimulus types
-	# -nreps number of repetitions for stim type 1, etc.
-	RSFgen \
-	-nt 230 \
-	-num_stimts 5 \
-	-nreps 1 4 \
-	-nreps 2 4 \
-	-nreps 3 4 \
-	-nreps 4 4 \
-	-nreps 5 8 \
-	-seed ${seed} -prefix rsf.${i}.
+# create random timings
+## change -max_consec to change how many of the same stim type can come in a row.
+	make_random_timing.py \
+	-num_stim 5 \
+	-num_runs 2 \
+	-run_time 460 \
+    -stim_dur 6 \
+    -num_reps 4 4 4 4 8 \
+    -prefix stim.${i} \
+    -stim_labels Posed_plus Posed_minus Regulated_plus Regulated_minus Spontaneous \
+    -tr 2.0 \
+    -max_consec 2
 
-	#turn stimulus files into stim_times files
-	# -nt number of TRs
-	# -tr TR length (in seconds)
-	make_stim_times.py \
-	-files rsf.${i}.*.1D \
-	-prefix stim.${i} \
-	-nt 230 \
-	-tr 2 \
-	-nruns 1
 
-	# test efficiency of randomly generated design
-	# -nodata number of TRs TR length
-	# -gltsym the contrasts you are most interested in
-	## see AFNI documentation for how to write them
+	#TODO: 3dDeconvolve command
+	#redirect the output to efficiency.${i}.txt
 	3dDeconvolve \
-	-nodata 230 2 \
+	-nodata 460 2 \
 	-polort 1 \
 	-num_stimts 5 \
-	-stim_times 1 stim.${i}.01.1D 'GAM' \
+	-concat '1D: 0 230' \
+	-stim_times 1 stim.${i}_01_Posed_plus.1D 'GAM' \
 	-stim_label 1 'Posed_plus' \
-	-stim_times 2 stim.${i}.02.1D 'GAM' \
+	-stim_times 2 stim.${i}_02_Posed_minus.1D 'GAM' \
 	-stim_label 2 'Posed_minus' \
-	-stim_times 3 stim.${i}.03.1D 'GAM' \
+	-stim_times 3 stim.${i}_03_Regulated_plus.1D 'GAM' \
 	-stim_label 3 'Regulated_plus' \
-	-stim_times 4 stim.${i}.04.1D 'GAM' \
+	-stim_times 4 stim.${i}_04_Regulated_minus.1D 'GAM' \
 	-stim_label 4 'Regulated_minus' \
-	-stim_times 5 stim.${i}.05.1D 'GAM' \
+	-stim_times 5 stim.${i}_05_Spontaneous.1D 'GAM' \
 	-stim_label 5 'Spontaneous' \
 	-gltsym "SYM: 0.25*Posed_plus 0.25*Posed_minus 0.25*Regulated_plus 0.25*Regulated_minus -1.0*Spontaneous" > efficiency.${i}.txt
 
-	# use efficiency parser script to put efficiency into results.txt
 	eff=`./efficiency_parser.py efficiency.${i}.txt`
 
-# use findLowest script to put a line at the end of the script
-# that indicates the lowest efficiency (most efficient) iteration
 	echo "$i $eff $seed" >> results.txt
 	#end loop
 done

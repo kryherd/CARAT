@@ -15,8 +15,8 @@ This should give you a file called `results.txt`. The columns in results include
 
 Once you've run `optimize.sh` and looked at `results.txt`, you can use `testiter.sh` to create timing files for a given iteration suitable for experimental presentation software.
 
-To run, `testiter.sh`, type the command and  then the iteration number you'd like to generate the timing file for.    
+To run, `testiter.sh`, type the command followed by the iteration number you'd like to generate the timing file for.
 
-* E.g., `sh testiter.sh 35`
+* E.g., `sh testiter.sh`
 
-This wil create a file (`SPONT_timings.csv` or `SPR_timings.csv`) that has onset times and stimulus types for a given iteration. You should present a stimulus with the type indicated in TrialType at each Onset Time.
+This wil create a two files (one for each run; `SPONT_timings_run#.csv` or `SPR_timings_run#.csv`) that has onset times and stimulus types for a given iteration. You should present a stimulus with the type indicated in TrialType at each Onset Time.

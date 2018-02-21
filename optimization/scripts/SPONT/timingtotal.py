@@ -6,36 +6,46 @@
 import numpy as np
 import sys
 import pandas as pd
+import argparse
+import subprocess
+import re
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--run', action='store', type=int, help="run")
+args=parser.parse_args()
+
 
 # create function that reshapes the timing files
-def timing_type8(data, num):
+def timing_type8(data, num, run):
 	df=pd.read_table(data, sep=' ', header=None)
 	df=df.transpose()
 	df=df.drop(8)
-	df=df.rename(index=str, columns={0:"Onset Time"})
+	run2 = run-1
+	df=df.loc[:,[run2]]
+	df=df.rename(index=str, columns={run2:"Onset Time"})
 	df['Type']=num
 	return df;
 
 # load and reshape the timing files
-p="./Posed.1D"
-P = timing_type8(p,1)
+p="./Pleasant.1D"
+P = timing_type8(p,1,args.run)
 
-r="./Regulated.1D"
-R = timing_type8(r,2)
+n="./Neutral.1D"
+N = timing_type8(n,2,args.run)
 
-s="./Spontaneous.1D"
-S=timing_type8(s,3)
+u="./Unpleasant.1D"
+U=timing_type8(u,3,args.run)
 
 # put all reshaped timing files together
-times = [P, R, S]
+times = [P, N, U]
 result = pd.concat(times)
 result = result.sort_values(by=['Onset Time'])
 result = result.reset_index()
 result = result.drop('index', axis=1)
 
 # add a column with trial type names
-trialtypes = {1: "Posed", 2: "Regulated", 3: "Spontaneous"}
+trialtypes = {1: "Pleasant", 2: "Neutral", 3: "Unpleasant"}
 result['TrialType'] = result['Type'].map(trialtypes)
 
 # write to csv
-result.to_csv('SPONT_timings.csv', index=False, sep=',')
+result.to_csv('SPONT_timings_run' + str(args.run) + '.csv', index=False, sep=',')
